@@ -1,0 +1,17 @@
+{
+  "weirdcommands.commands.language.set.success.single": "Set language to %s for player %s",
+  "weirdcommands.commands.language.set.success.multiple": "Set language to %s for %s players",
+
+  "weirdcommands.commands.effect.set.success.single": "Set effect to %s for player %s",
+  "weirdcommands.commands.effect.set.success.multiple": "Set effect to %s for %s players",
+  "weirdcommands.commands.effect.clear.success.single": "Cleared effect for player %s",
+  "weirdcommands.commands.effect.clear.success.multiple": "Cleared effect from %s players",
+  "weirdcommands.commands.effect.random.success.single": "Applied random effect to player %s",
+  "weirdcommands.commands.effect.random.success.multiple": "Applied random effect to %s players",
+
+  "weirdcommands.commands.perspective.set.success.single": "Set perspective to %s for player %s",
+  "weirdcommands.commands.perspective.set.success.multiple": "Set perspective to %s for %s players",
+
+  "weirdcommands.commands.smooth_camera.set.success.single": "Set smooth camera to %s for player %s",
+  "weirdcommands.commands.smooth_camera.set.success.multiple": "Set smooth camera to %s for %s players"
+}

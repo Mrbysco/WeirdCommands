@@ -6,14 +6,14 @@ import com.mrbysco.weirdcommands.network.message.LangsToServerMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent.LoggedInEvent;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent.LoggingIn;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 
 public class ClientHandler {
 
-	public static void onLogin(LoggedInEvent event) {
+	public static void onLogin(LoggingIn event) {
 		if (Minecraft.getInstance().getConnection() != null) {
 			syncValues();
 		}

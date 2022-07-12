@@ -19,9 +19,9 @@ public enum Perspective {
 
 	@Nullable
 	public static Perspective getByName(@Nullable String value) {
-		for (Perspective captcha : values()) {
-			if (captcha.getPerspectiveName().equals(value)) {
-				return captcha;
+		for (Perspective perspective : values()) {
+			if (perspective.getPerspectiveName().equals(value)) {
+				return perspective;
 			}
 		}
 		return FIRST_PERSON;

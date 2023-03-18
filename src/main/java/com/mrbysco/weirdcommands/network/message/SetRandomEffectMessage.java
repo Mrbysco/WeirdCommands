@@ -6,6 +6,7 @@ import net.minecraftforge.fml.DistExecutor.SafeRunnable;
 import net.minecraftforge.network.NetworkEvent.Context;
 
 import java.io.Serial;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class SetRandomEffectMessage {
@@ -42,10 +43,10 @@ public class SetRandomEffectMessage {
 					Minecraft minecraft = Minecraft.getInstance();
 					minecraft.gameRenderer.cycleEffect();
 
-					if (minecraft.gameRenderer.currentEffect() != null && minecraft.gameRenderer.currentEffect().getName().equals("minecraft:shaders/post/blur.json")) {
+					if (minecraft.gameRenderer.currentEffect() != null && Objects.requireNonNull(minecraft.gameRenderer.currentEffect()).getName().equals("minecraft:shaders/post/blur.json")) {
 						minecraft.gameRenderer.cycleEffect();
 
-						if (minecraft.gameRenderer.currentEffect() != null && minecraft.gameRenderer.currentEffect().getName().equals("minecraft:shaders/post/blur.json")) {
+						if (minecraft.gameRenderer.currentEffect() != null && Objects.requireNonNull(minecraft.gameRenderer.currentEffect()).getName().equals("minecraft:shaders/post/blur.json")) {
 							minecraft.gameRenderer.shutdownEffect();
 						}
 					}

@@ -46,7 +46,9 @@ public class SetLanguageMessage {
 					Minecraft minecraft = Minecraft.getInstance();
 					LanguageManager languageManager = minecraft.getLanguageManager();
 					LanguageInfo languageInfo = languageManager.getLanguage(language);
-					languageManager.setSelected(languageInfo);
+					if (languageInfo != null) {
+						languageManager.setSelected(language);
+					}
 					minecraft.reloadResourcePacks();
 				}
 			};

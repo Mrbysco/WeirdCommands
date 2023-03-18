@@ -22,7 +22,7 @@ public class ClientHandler {
 	public static void syncValues() {
 		List<String> languages = Lists.newArrayList();
 		Minecraft mc = Minecraft.getInstance();
-		mc.getLanguageManager().getLanguages().forEach((info) -> languages.add(info.getCode()));
+		mc.getLanguageManager().getLanguages().forEach((language, languageInfo) -> languages.add(language));
 		PacketHandler.CHANNEL.sendToServer(new LangsToServerMessage(languages));
 
 		List<ResourceLocation> effects = List.of(GameRenderer.EFFECTS);

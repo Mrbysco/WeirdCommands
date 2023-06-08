@@ -69,10 +69,10 @@ public class ModCommands {
 
 		MutableComponent component = Component.literal(langID).withStyle(ChatFormatting.GOLD);
 		if (players.size() == 1) {
-			context.getSource().sendSuccess(Component.translatable("weirdcommands.commands.language.set.success.single",
+			context.getSource().sendSuccess(() -> Component.translatable("weirdcommands.commands.language.set.success.single",
 					component, players.iterator().next().getName()).withStyle(ChatFormatting.YELLOW), true);
 		} else {
-			context.getSource().sendSuccess(Component.translatable("weirdcommands.commands.language.set.success.multiple",
+			context.getSource().sendSuccess(() -> Component.translatable("weirdcommands.commands.language.set.success.multiple",
 					component, players.size()).withStyle(ChatFormatting.YELLOW), true);
 		}
 
@@ -88,10 +88,10 @@ public class ModCommands {
 
 		MutableComponent component = Component.literal(effectID.toString()).withStyle(ChatFormatting.GOLD);
 		if (players.size() == 1) {
-			context.getSource().sendSuccess(Component.translatable("weirdcommands.commands.effect.set.success.single",
+			context.getSource().sendSuccess(() -> Component.translatable("weirdcommands.commands.effect.set.success.single",
 					component, players.iterator().next().getName()).withStyle(ChatFormatting.YELLOW), true);
 		} else {
-			context.getSource().sendSuccess(Component.translatable("weirdcommands.commands.effect.set.success.multiple",
+			context.getSource().sendSuccess(() -> Component.translatable("weirdcommands.commands.effect.set.success.multiple",
 					component, players.size()).withStyle(ChatFormatting.YELLOW), true);
 		}
 
@@ -105,10 +105,10 @@ public class ModCommands {
 		}
 
 		if (players.size() == 1) {
-			context.getSource().sendSuccess(Component.translatable("weirdcommands.commands.effect.clear.success.single",
+			context.getSource().sendSuccess(() -> Component.translatable("weirdcommands.commands.effect.clear.success.single",
 					players.iterator().next().getName()).withStyle(ChatFormatting.YELLOW), true);
 		} else {
-			context.getSource().sendSuccess(Component.translatable("weirdcommands.commands.effect.clear.success.multiple",
+			context.getSource().sendSuccess(() -> Component.translatable("weirdcommands.commands.effect.clear.success.multiple",
 					players.size()).withStyle(ChatFormatting.YELLOW), true);
 		}
 
@@ -122,10 +122,10 @@ public class ModCommands {
 		}
 
 		if (players.size() == 1) {
-			context.getSource().sendSuccess(Component.translatable("weirdcommands.commands.effect.random.success.single",
+			context.getSource().sendSuccess(() -> Component.translatable("weirdcommands.commands.effect.random.success.single",
 					players.iterator().next().getName()).withStyle(ChatFormatting.YELLOW), true);
 		} else {
-			context.getSource().sendSuccess(Component.translatable("weirdcommands.commands.effect.random.success.multiple",
+			context.getSource().sendSuccess(() -> Component.translatable("weirdcommands.commands.effect.random.success.multiple",
 					players.size()).withStyle(ChatFormatting.YELLOW), true);
 		}
 
@@ -141,10 +141,10 @@ public class ModCommands {
 
 		MutableComponent component = Component.literal(perspective.getPerspectiveName()).withStyle(ChatFormatting.GOLD);
 		if (players.size() == 1) {
-			context.getSource().sendSuccess(Component.translatable("weirdcommands.commands.perspective.set.success.single",
+			context.getSource().sendSuccess(() -> Component.translatable("weirdcommands.commands.perspective.set.success.single",
 					component, players.iterator().next().getName()).withStyle(ChatFormatting.YELLOW), true);
 		} else {
-			context.getSource().sendSuccess(Component.translatable("weirdcommands.commands.perspective.set.success.multiple",
+			context.getSource().sendSuccess(() -> Component.translatable("weirdcommands.commands.perspective.set.success.multiple",
 					component, players.size()).withStyle(ChatFormatting.YELLOW), true);
 		}
 
@@ -160,10 +160,10 @@ public class ModCommands {
 
 		MutableComponent component = Component.literal(String.valueOf(enabled)).withStyle(ChatFormatting.GOLD);
 		if (players.size() == 1) {
-			context.getSource().sendSuccess(Component.translatable("weirdcommands.commands.smooth_camera.set.success.single",
+			context.getSource().sendSuccess(() -> Component.translatable("weirdcommands.commands.smooth_camera.set.success.single",
 					component, players.iterator().next().getName()).withStyle(ChatFormatting.YELLOW), true);
 		} else {
-			context.getSource().sendSuccess(Component.translatable("weirdcommands.commands.smooth_camera.set.success.multiple",
+			context.getSource().sendSuccess(() -> Component.translatable("weirdcommands.commands.smooth_camera.set.success.multiple",
 					component, players.size()).withStyle(ChatFormatting.YELLOW), true);
 		}
 

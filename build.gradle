@@ -111,9 +111,8 @@ publishing {
 if (System.getenv().CURSEFORGE_KEY) {
     task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
         apiToken = System.getenv().CURSEFORGE_KEY
-        projectId = project.curseforge_id
 
-        def mainFile = upload(projectId, jar)
+        def mainFile = upload(project.curseforge_id, jar)
         mainFile.releaseType = 'beta'
         mainFile.addGameVersion "NeoForge"
         mainFile.addGameVersion "${mc_version}"

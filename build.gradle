@@ -5,7 +5,7 @@ plugins {
     id 'maven-publish'
     id 'net.neoforged.gradle.userdev' version '7.0.5'
 //    id 'net.neoforged.gradle.mixin' version '7.0.5'
-    id 'net.darkhax.curseforgegradle' version '1.1.15'
+    id 'net.darkhax.curseforgegradle' version '1.1.16'
     id 'com.modrinth.minotaur' version "2.+"
 }
 
@@ -108,9 +108,39 @@ publishing {
     }
 }
 
+if (System.getenv().CURSEFORGE_KEY) {
+    task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+        apiToken = System.getenv().CURSEFORGE_KEY
+        projectId = project.curseforge_id
+
+        def mainFile = upload(projectId, jar)
+        mainFile.releaseType = 'release'
+        mainFile.addGameVersion "NeoForge"
+        mainFile.addGameVersion "${mc_version}"
+        mainFile.addGameVersion "Java 17"
+
+        mainFile.changelog = file("$project.rootDir/changelog.md")
+        mainFile.changelogType = 'markdown'
+
+//        mainFile.addRequirement()
+//        mainFile.addOptional()
+    }
+}
+
+if (System.getenv().MODRINTH_KEY) {
+    modrinth {
+        token = System.getenv().MODRINTH_KEY
+        projectId = project.modrinth_id
+        versionType = "release"
+        versionName = "${mod_name} ${mc_version}"
+        versionNumber = project.version
+        uploadFile = jar
+        changelog = file("$project.rootDir/changelog.md").text
+        gameVersions = ["${mc_version}"]
+        loaders = ["neoforge"]
+    }
+}
+
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
-
-apply from: 'gradle/curseforge.gradle'
-apply from: 'gradle/modrinth.gradle'

@@ -2,56 +2,38 @@ package com.mrbysco.weirdcommands.network.message;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fml.DistExecutor.SafeRunnable;
-import net.minecraftforge.network.NetworkEvent.Context;
+import net.neoforged.neoforge.network.NetworkEvent;
 
-import java.io.Serial;
 import java.util.Objects;
-import java.util.function.Supplier;
 
 public class SetRandomEffectMessage {
 
-	public SetRandomEffectMessage() {
-	}
+    public SetRandomEffectMessage() {
+    }
 
-	public static SetRandomEffectMessage decode(final FriendlyByteBuf buffer) {
-		return new SetRandomEffectMessage();
-	}
+    public static SetRandomEffectMessage decode(final FriendlyByteBuf buffer) {
+        return new SetRandomEffectMessage();
+    }
 
-	public void encode(FriendlyByteBuf buffer) {
+    public void encode(FriendlyByteBuf buffer) {
 
-	}
+    }
 
-	public void handle(Supplier<Context> context) {
-		Context ctx = context.get();
-		ctx.enqueueWork(() -> {
-			if (ctx.getDirection().getReceptionSide().isClient()) {
-				EffectEvent.randomizeEffect().run();
-			}
-		});
-		ctx.setPacketHandled(true);
-	}
+    public void handle(NetworkEvent.Context ctx) {
+        ctx.enqueueWork(() -> {
+            if (ctx.getDirection().getReceptionSide().isClient()) {
+                Minecraft minecraft = Minecraft.getInstance();
+                minecraft.gameRenderer.cycleEffect();
 
-	private static class EffectEvent {
-		private static SafeRunnable randomizeEffect() {
-			return new SafeRunnable() {
-				@Serial
-				private static final long serialVersionUID = 1L;
+                if (minecraft.gameRenderer.currentEffect() != null && Objects.requireNonNull(minecraft.gameRenderer.currentEffect()).getName().equals("minecraft:shaders/post/blur.json")) {
+                    minecraft.gameRenderer.cycleEffect();
 
-				@Override
-				public void run() {
-					Minecraft minecraft = Minecraft.getInstance();
-					minecraft.gameRenderer.cycleEffect();
-
-					if (minecraft.gameRenderer.currentEffect() != null && Objects.requireNonNull(minecraft.gameRenderer.currentEffect()).getName().equals("minecraft:shaders/post/blur.json")) {
-						minecraft.gameRenderer.cycleEffect();
-
-						if (minecraft.gameRenderer.currentEffect() != null && Objects.requireNonNull(minecraft.gameRenderer.currentEffect()).getName().equals("minecraft:shaders/post/blur.json")) {
-							minecraft.gameRenderer.shutdownEffect();
-						}
-					}
-				}
-			};
-		}
-	}
+                    if (minecraft.gameRenderer.currentEffect() != null && Objects.requireNonNull(minecraft.gameRenderer.currentEffect()).getName().equals("minecraft:shaders/post/blur.json")) {
+                        minecraft.gameRenderer.shutdownEffect();
+                    }
+                }
+            }
+        });
+        ctx.setPacketHandled(true);
+    }
 }

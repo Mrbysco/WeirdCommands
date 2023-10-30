@@ -1,17 +1,18 @@
-apply plugin: "com.matthewprenger.cursegradle"
-
 if (System.getenv().CURSEFORGE_KEY) {
-    curseforge {
-        apiKey = System.getenv().CURSEFORGE_KEY
-        project {
-            id = project.curseforge_id
-            releaseType = "beta"
-            addGameVersion "Forge"
-            addGameVersion "${mc_version}"
-            addGameVersion "Java 17"
-            mainArtifact(jar)
-            changelog = file("$project.rootDir/changelog.md")
-            changelogType = 'markdown'
-        }
+    task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+        apiToken = System.getenv().CURSEFORGE_KEY
+        projectId = project.curseforge_id
+
+        def mainFile = upload(projectId, jar)
+        mainFile.releaseType = 'beta'
+        mainFile.addGameVersion "NeoForge"
+        mainFile.addGameVersion "${mc_version}"
+        mainFile.addGameVersion "Java 17"
+
+        mainFile.changelog = file("$project.rootDir/changelog.md")
+        mainFile.changelogType = 'markdown'
+
+//        mainFile.addRequirement()
+//        mainFile.addOptional()
     }
 }

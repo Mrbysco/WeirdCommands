@@ -1,7 +1,6 @@
 apply plugin: "com.modrinth.minotaur"
 
 if (System.getenv().MODRINTH_KEY) {
-    String fileContents = file("$project.rootDir/changelog.md").text
     modrinth {
         token = System.getenv().MODRINTH_KEY
         projectId = project.modrinth_id
@@ -9,8 +8,8 @@ if (System.getenv().MODRINTH_KEY) {
         versionName = "${mod_name} ${mc_version}"
         versionNumber = project.version
         uploadFile = jar
-        changelog = fileContents
+        changelog = file("$project.rootDir/changelog.md").text
         gameVersions = ["${mc_version}"]
-        loaders = ["forge"]
+        loaders = ["neoforge"]
     }
 }

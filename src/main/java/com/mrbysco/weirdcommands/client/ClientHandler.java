@@ -18,20 +18,20 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = WeirdCommandsMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientHandler {
 
-    @SubscribeEvent
-    public static void onLogin(LoggingIn event) {
-        if (Minecraft.getInstance().getConnection() != null) {
-            syncValues();
-        }
-    }
+	@SubscribeEvent
+	public static void onLogin(LoggingIn event) {
+		if (Minecraft.getInstance().getConnection() != null) {
+			syncValues();
+		}
+	}
 
-    public static void syncValues() {
-        List<String> languages = Lists.newArrayList();
-        Minecraft mc = Minecraft.getInstance();
-        mc.getLanguageManager().getLanguages().forEach((language, languageInfo) -> languages.add(language));
-        PacketHandler.CHANNEL.sendToServer(new LangsToServerMessage(languages));
+	public static void syncValues() {
+		List<String> languages = Lists.newArrayList();
+		Minecraft mc = Minecraft.getInstance();
+		mc.getLanguageManager().getLanguages().forEach((language, languageInfo) -> languages.add(language));
+		PacketHandler.CHANNEL.sendToServer(new LangsToServerMessage(languages));
 
-        List<ResourceLocation> effects = List.of(GameRenderer.EFFECTS);
-        PacketHandler.CHANNEL.sendToServer(new EffectsToServerMessage(effects));
-    }
+		List<ResourceLocation> effects = List.of(GameRenderer.EFFECTS);
+		PacketHandler.CHANNEL.sendToServer(new EffectsToServerMessage(effects));
+	}
 }

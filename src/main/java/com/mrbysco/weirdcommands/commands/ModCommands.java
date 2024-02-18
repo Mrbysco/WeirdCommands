@@ -8,12 +8,11 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mrbysco.weirdcommands.WeirdCommandsMod;
-import com.mrbysco.weirdcommands.network.PacketHandler;
-import com.mrbysco.weirdcommands.network.message.SetEffectMessage;
-import com.mrbysco.weirdcommands.network.message.SetLanguageMessage;
-import com.mrbysco.weirdcommands.network.message.SetPerspectiveMessage;
-import com.mrbysco.weirdcommands.network.message.SetRandomEffectMessage;
-import com.mrbysco.weirdcommands.network.message.SetSmoothCameraMessage;
+import com.mrbysco.weirdcommands.network.message.SetEffectPayload;
+import com.mrbysco.weirdcommands.network.message.SetLanguagePayload;
+import com.mrbysco.weirdcommands.network.message.SetPerspectivePayload;
+import com.mrbysco.weirdcommands.network.message.SetRandomEffectPayload;
+import com.mrbysco.weirdcommands.network.message.SetSmoothCameraPayload;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -24,15 +23,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.command.EnumArgument;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class ModCommands {
-	public static List<String> languages = List.of("en_us");
-	public static List<ResourceLocation> effects = Lists.newArrayList();
+	public static final List<String> languages = new ArrayList<>(List.of("en_us"));
+	public static final List<ResourceLocation> effects = Lists.newArrayList();
 
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		final LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal(WeirdCommandsMod.MOD_ID);
@@ -64,7 +63,7 @@ public class ModCommands {
 		String langID = StringArgumentType.getString(context, "id");
 		Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "players");
 		for (ServerPlayer player : players) {
-			PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new SetLanguageMessage(langID));
+			player.connection.send(new SetLanguagePayload(langID));
 		}
 
 		MutableComponent component = Component.literal(langID).withStyle(ChatFormatting.GOLD);
@@ -83,7 +82,7 @@ public class ModCommands {
 		ResourceLocation effectID = ResourceLocationArgument.getId(context, "id");
 		Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "players");
 		for (ServerPlayer player : players) {
-			PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new SetEffectMessage(effectID));
+			player.connection.send(new SetEffectPayload(effectID));
 		}
 
 		MutableComponent component = Component.literal(effectID.toString()).withStyle(ChatFormatting.GOLD);
@@ -101,7 +100,7 @@ public class ModCommands {
 	private static int clearEffect(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 		Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "players");
 		for (ServerPlayer player : players) {
-			PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new SetEffectMessage(null));
+			player.connection.send(new SetEffectPayload((ResourceLocation) null));
 		}
 
 		if (players.size() == 1) {
@@ -118,7 +117,7 @@ public class ModCommands {
 	private static int setRandomEffect(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 		Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "players");
 		for (ServerPlayer player : players) {
-			PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new SetRandomEffectMessage());
+			player.connection.send(new SetRandomEffectPayload());
 		}
 
 		if (players.size() == 1) {
@@ -136,7 +135,7 @@ public class ModCommands {
 		final Perspective perspective = context.getArgument("perspective", Perspective.class);
 		Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "players");
 		for (ServerPlayer player : players) {
-			PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new SetPerspectiveMessage(perspective));
+			player.connection.send(new SetPerspectivePayload(perspective));
 		}
 
 		MutableComponent component = Component.literal(perspective.getPerspectiveName()).withStyle(ChatFormatting.GOLD);
@@ -155,7 +154,7 @@ public class ModCommands {
 		final boolean enabled = BoolArgumentType.getBool(context, "enabled");
 		Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "players");
 		for (ServerPlayer player : players) {
-			PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new SetSmoothCameraMessage(enabled));
+			player.connection.send(new SetSmoothCameraPayload(enabled));
 		}
 
 		MutableComponent component = Component.literal(String.valueOf(enabled)).withStyle(ChatFormatting.GOLD);

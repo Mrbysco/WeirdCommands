@@ -5,7 +5,6 @@ import com.mrbysco.weirdcommands.commands.ModCommands;
 import com.mrbysco.weirdcommands.network.PacketHandler;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import org.slf4j.Logger;
@@ -16,12 +15,8 @@ public class WeirdCommandsMod {
 	public static final Logger LOGGER = LogUtils.getLogger();
 
 	public WeirdCommandsMod(IEventBus eventBus) {
-		eventBus.addListener(this::setup);
+		eventBus.addListener(PacketHandler::setupPackets);
 		NeoForge.EVENT_BUS.addListener(this::onCommandRegister);
-	}
-
-	private void setup(final FMLCommonSetupEvent event) {
-		PacketHandler.init();
 	}
 
 	public void onCommandRegister(RegisterCommandsEvent event) {

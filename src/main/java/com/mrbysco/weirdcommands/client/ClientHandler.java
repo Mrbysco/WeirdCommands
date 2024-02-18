@@ -1,9 +1,8 @@
 package com.mrbysco.weirdcommands.client;
 
 import com.mrbysco.weirdcommands.WeirdCommandsMod;
-import com.mrbysco.weirdcommands.network.PacketHandler;
-import com.mrbysco.weirdcommands.network.message.EffectsToServerMessage;
-import com.mrbysco.weirdcommands.network.message.LangsToServerMessage;
+import com.mrbysco.weirdcommands.network.message.EffectsToServerPayload;
+import com.mrbysco.weirdcommands.network.message.LangsToServerPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -11,6 +10,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent.LoggingIn;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
@@ -29,9 +29,9 @@ public class ClientHandler {
 		List<String> languages = Lists.newArrayList();
 		Minecraft mc = Minecraft.getInstance();
 		mc.getLanguageManager().getLanguages().forEach((language, languageInfo) -> languages.add(language));
-		PacketHandler.CHANNEL.sendToServer(new LangsToServerMessage(languages));
+		PacketDistributor.SERVER.noArg().send(new LangsToServerPayload(languages));
 
 		List<ResourceLocation> effects = List.of(GameRenderer.EFFECTS);
-		PacketHandler.CHANNEL.sendToServer(new EffectsToServerMessage(effects));
+		PacketDistributor.SERVER.noArg().send(new EffectsToServerPayload(effects));
 	}
 }

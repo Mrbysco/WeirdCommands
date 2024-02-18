@@ -1,35 +1,36 @@
 package com.mrbysco.weirdcommands.network;
 
 import com.mrbysco.weirdcommands.WeirdCommandsMod;
-import com.mrbysco.weirdcommands.network.message.EffectsToServerMessage;
-import com.mrbysco.weirdcommands.network.message.LangsToServerMessage;
-import com.mrbysco.weirdcommands.network.message.SetEffectMessage;
-import com.mrbysco.weirdcommands.network.message.SetLanguageMessage;
-import com.mrbysco.weirdcommands.network.message.SetPerspectiveMessage;
-import com.mrbysco.weirdcommands.network.message.SetRandomEffectMessage;
-import com.mrbysco.weirdcommands.network.message.SetSmoothCameraMessage;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.network.NetworkRegistry;
-import net.neoforged.neoforge.network.simple.SimpleChannel;
+import com.mrbysco.weirdcommands.network.handler.ClientPayloadHandler;
+import com.mrbysco.weirdcommands.network.handler.ServerPayloadHandler;
+import com.mrbysco.weirdcommands.network.message.EffectsToServerPayload;
+import com.mrbysco.weirdcommands.network.message.LangsToServerPayload;
+import com.mrbysco.weirdcommands.network.message.SetEffectPayload;
+import com.mrbysco.weirdcommands.network.message.SetLanguagePayload;
+import com.mrbysco.weirdcommands.network.message.SetPerspectivePayload;
+import com.mrbysco.weirdcommands.network.message.SetRandomEffectPayload;
+import com.mrbysco.weirdcommands.network.message.SetSmoothCameraPayload;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 
 public class PacketHandler {
-	private static final String PROTOCOL_VERSION = "1";
-	public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-			new ResourceLocation(WeirdCommandsMod.MOD_ID, "main"),
-			() -> PROTOCOL_VERSION,
-			PROTOCOL_VERSION::equals,
-			PROTOCOL_VERSION::equals
-	);
+	public static void setupPackets(final RegisterPayloadHandlerEvent event) {
+		final IPayloadRegistrar registrar = event.registrar(WeirdCommandsMod.MOD_ID);
 
-	private static int id = 0;
+		registrar.play(SetEffectPayload.ID, SetEffectPayload::new, handler -> handler
+				.client(ClientPayloadHandler.getInstance()::handleEffectData));
+		registrar.play(SetLanguagePayload.ID, SetLanguagePayload::new, handler -> handler
+				.client(ClientPayloadHandler.getInstance()::handleLangData));
+		registrar.play(SetPerspectivePayload.ID, SetPerspectivePayload::new, handler -> handler
+				.client(ClientPayloadHandler.getInstance()::handlePerspectiveData));
+		registrar.play(SetRandomEffectPayload.ID, SetRandomEffectPayload::new, handler -> handler
+				.client(ClientPayloadHandler.getInstance()::handleRandomEffectData));
+		registrar.play(SetSmoothCameraPayload.ID, SetSmoothCameraPayload::new, handler -> handler
+				.client(ClientPayloadHandler.getInstance()::handleSmoothCameraData));
 
-	public static void init() {
-		CHANNEL.registerMessage(id++, LangsToServerMessage.class, LangsToServerMessage::encode, LangsToServerMessage::decode, LangsToServerMessage::handle);
-		CHANNEL.registerMessage(id++, SetLanguageMessage.class, SetLanguageMessage::encode, SetLanguageMessage::decode, SetLanguageMessage::handle);
-		CHANNEL.registerMessage(id++, EffectsToServerMessage.class, EffectsToServerMessage::encode, EffectsToServerMessage::decode, EffectsToServerMessage::handle);
-		CHANNEL.registerMessage(id++, SetEffectMessage.class, SetEffectMessage::encode, SetEffectMessage::decode, SetEffectMessage::handle);
-		CHANNEL.registerMessage(id++, SetRandomEffectMessage.class, SetRandomEffectMessage::encode, SetRandomEffectMessage::decode, SetRandomEffectMessage::handle);
-		CHANNEL.registerMessage(id++, SetPerspectiveMessage.class, SetPerspectiveMessage::encode, SetPerspectiveMessage::decode, SetPerspectiveMessage::handle);
-		CHANNEL.registerMessage(id++, SetSmoothCameraMessage.class, SetSmoothCameraMessage::encode, SetSmoothCameraMessage::decode, SetSmoothCameraMessage::handle);
+		registrar.play(EffectsToServerPayload.ID, EffectsToServerPayload::new, handler -> handler
+				.server(ServerPayloadHandler.getInstance()::handleEffectData));
+		registrar.play(LangsToServerPayload.ID, LangsToServerPayload::new, handler -> handler
+				.server(ServerPayloadHandler.getInstance()::handleLangData));
 	}
 }

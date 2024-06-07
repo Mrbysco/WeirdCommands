@@ -4,7 +4,7 @@ import com.mrbysco.weirdcommands.commands.ModCommands;
 import com.mrbysco.weirdcommands.network.message.EffectsToServerPayload;
 import com.mrbysco.weirdcommands.network.message.LangsToServerPayload;
 import net.minecraft.network.chat.Component;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class ServerPayloadHandler {
 	public static final ServerPayloadHandler INSTANCE = new ServerPayloadHandler();
@@ -13,35 +13,33 @@ public class ServerPayloadHandler {
 		return INSTANCE;
 	}
 
-	public void handleEffectData(final EffectsToServerPayload payload, final PlayPayloadContext context) {
+	public void handleEffectData(final EffectsToServerPayload payload, final IPayloadContext context) {
 		// Do something with the data, on the main thread
-		context.workHandler().submitAsync(() -> {
-					ModCommands.effects.clear();
-					if (!payload.values().isEmpty()) {
-						ModCommands.effects.addAll(payload.values());
-					}
-				})
-				.exceptionally(e -> {
-					// Handle exception
-					context.packetHandler().disconnect(Component.translatable("weirdcommands.networking.effects_to_server.failed", e.getMessage()));
-					return null;
-				});
+		context.enqueueWork(() -> {
+			ModCommands.effects.clear();
+			if (!payload.values().isEmpty()) {
+				ModCommands.effects.addAll(payload.values());
+			}
+		}).exceptionally(e -> {
+			// Handle exception
+			context.disconnect(Component.translatable("weirdcommands.networking.effects_to_server.failed", e.getMessage()));
+			return null;
+		});
 	}
 
-	public void handleLangData(final LangsToServerPayload payload, final PlayPayloadContext context) {
+	public void handleLangData(final LangsToServerPayload payload, final IPayloadContext context) {
 		// Do something with the data, on the main thread
-		context.workHandler().submitAsync(() -> {
-					if (payload.values().isEmpty()) {
-						ModCommands.languages.add("en_us");
-					} else {
-						ModCommands.languages.clear();
-						ModCommands.languages.addAll(payload.values());
-					}
-				})
-				.exceptionally(e -> {
-					// Handle exception
-					context.packetHandler().disconnect(Component.translatable("weirdcommands.networking.effects_to_server.failed", e.getMessage()));
-					return null;
-				});
+		context.enqueueWork(() -> {
+			if (payload.values().isEmpty()) {
+				ModCommands.languages.add("en_us");
+			} else {
+				ModCommands.languages.clear();
+				ModCommands.languages.addAll(payload.values());
+			}
+		}).exceptionally(e -> {
+			// Handle exception
+			context.disconnect(Component.translatable("weirdcommands.networking.effects_to_server.failed", e.getMessage()));
+			return null;
+		});
 	}
 }

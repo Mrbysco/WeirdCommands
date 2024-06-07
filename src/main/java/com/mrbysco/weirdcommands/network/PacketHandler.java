@@ -10,27 +10,20 @@ import com.mrbysco.weirdcommands.network.message.SetLanguagePayload;
 import com.mrbysco.weirdcommands.network.message.SetPerspectivePayload;
 import com.mrbysco.weirdcommands.network.message.SetRandomEffectPayload;
 import com.mrbysco.weirdcommands.network.message.SetSmoothCameraPayload;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class PacketHandler {
-	public static void setupPackets(final RegisterPayloadHandlerEvent event) {
-		final IPayloadRegistrar registrar = event.registrar(WeirdCommandsMod.MOD_ID);
+	public static void setupPackets(final RegisterPayloadHandlersEvent event) {
+		final PayloadRegistrar registrar = event.registrar(WeirdCommandsMod.MOD_ID);
 
-		registrar.play(SetEffectPayload.ID, SetEffectPayload::new, handler -> handler
-				.client(ClientPayloadHandler.getInstance()::handleEffectData));
-		registrar.play(SetLanguagePayload.ID, SetLanguagePayload::new, handler -> handler
-				.client(ClientPayloadHandler.getInstance()::handleLangData));
-		registrar.play(SetPerspectivePayload.ID, SetPerspectivePayload::new, handler -> handler
-				.client(ClientPayloadHandler.getInstance()::handlePerspectiveData));
-		registrar.play(SetRandomEffectPayload.ID, SetRandomEffectPayload::new, handler -> handler
-				.client(ClientPayloadHandler.getInstance()::handleRandomEffectData));
-		registrar.play(SetSmoothCameraPayload.ID, SetSmoothCameraPayload::new, handler -> handler
-				.client(ClientPayloadHandler.getInstance()::handleSmoothCameraData));
+		registrar.playToClient(SetEffectPayload.ID, SetEffectPayload.CODEC, ClientPayloadHandler.getInstance()::handleEffectData);
+		registrar.playToClient(SetLanguagePayload.ID, SetLanguagePayload.CODEC, ClientPayloadHandler.getInstance()::handleLangData);
+		registrar.playToClient(SetPerspectivePayload.ID, SetPerspectivePayload.CODEC, ClientPayloadHandler.getInstance()::handlePerspectiveData);
+		registrar.playToClient(SetRandomEffectPayload.ID, SetRandomEffectPayload.CODEC, ClientPayloadHandler.getInstance()::handleRandomEffectData);
+		registrar.playToClient(SetSmoothCameraPayload.ID, SetSmoothCameraPayload.CODEC, ClientPayloadHandler.getInstance()::handleSmoothCameraData);
 
-		registrar.play(EffectsToServerPayload.ID, EffectsToServerPayload::new, handler -> handler
-				.server(ServerPayloadHandler.getInstance()::handleEffectData));
-		registrar.play(LangsToServerPayload.ID, LangsToServerPayload::new, handler -> handler
-				.server(ServerPayloadHandler.getInstance()::handleLangData));
+		registrar.playToServer(EffectsToServerPayload.ID, EffectsToServerPayload.CODEC, ServerPayloadHandler.getInstance()::handleEffectData);
+		registrar.playToServer(LangsToServerPayload.ID, LangsToServerPayload.CODEC, ServerPayloadHandler.getInstance()::handleLangData);
 	}
 }

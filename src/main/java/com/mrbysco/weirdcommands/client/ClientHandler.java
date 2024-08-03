@@ -48,7 +48,6 @@ public class ClientHandler {
 		EFFECTS.clear();
 		map.forEach((location, resource) -> EFFECTS.add(location));
 		EFFECTS.removeIf(location -> location.toString().equals("minecraft:shaders/post/blur.json"));
-		System.out.println(EFFECTS);
 
 		PacketDistributor.sendToServer(new EffectsToServerPayload(EFFECTS));
 	}

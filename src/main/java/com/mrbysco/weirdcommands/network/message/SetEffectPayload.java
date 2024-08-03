@@ -10,7 +10,7 @@ public record SetEffectPayload(ResourceLocation effect) implements CustomPacketP
 	public static final StreamCodec<FriendlyByteBuf, SetEffectPayload> CODEC = CustomPacketPayload.codec(
 			SetEffectPayload::write,
 			SetEffectPayload::new);
-	public static final Type<SetEffectPayload> ID = CustomPacketPayload.createType(new ResourceLocation(WeirdCommandsMod.MOD_ID, "set_effect").toString());
+	public static final Type<SetEffectPayload> ID = new Type<>(WeirdCommandsMod.modLoc("set_effect"));
 
 	public SetEffectPayload(final FriendlyByteBuf buffer) {
 		this(getEffect(buffer));

@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@SuppressWarnings("SameReturnValue")
 public class ModCommands {
 	public static final List<String> languages = new ArrayList<>(List.of("en_us"));
 	public static final List<ResourceLocation> effects = Lists.newArrayList();

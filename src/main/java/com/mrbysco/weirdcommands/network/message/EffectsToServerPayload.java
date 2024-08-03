@@ -12,7 +12,7 @@ public record EffectsToServerPayload(List<ResourceLocation> values) implements C
 	public static final StreamCodec<FriendlyByteBuf, EffectsToServerPayload> CODEC = CustomPacketPayload.codec(
 			EffectsToServerPayload::write,
 			EffectsToServerPayload::new);
-	public static final Type<EffectsToServerPayload> ID = CustomPacketPayload.createType(new ResourceLocation(WeirdCommandsMod.MOD_ID, "effects_to_server").toString());
+	public static final Type<EffectsToServerPayload> ID = new Type<>(WeirdCommandsMod.modLoc("effects_to_server"));
 
 	public EffectsToServerPayload(final FriendlyByteBuf buffer) {
 		this(buffer.readList(FriendlyByteBuf::readResourceLocation));

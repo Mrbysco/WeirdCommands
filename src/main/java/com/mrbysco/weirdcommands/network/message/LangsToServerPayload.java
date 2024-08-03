@@ -4,7 +4,6 @@ import com.mrbysco.weirdcommands.WeirdCommandsMod;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ public record LangsToServerPayload(List<String> values) implements CustomPacketP
 	public static final StreamCodec<FriendlyByteBuf, LangsToServerPayload> CODEC = CustomPacketPayload.codec(
 			LangsToServerPayload::write,
 			LangsToServerPayload::new);
-	public static final Type<LangsToServerPayload> ID = CustomPacketPayload.createType(new ResourceLocation(WeirdCommandsMod.MOD_ID, "langs_to_server").toString());
+	public static final Type<LangsToServerPayload> ID = new Type<>(WeirdCommandsMod.modLoc("langs_to_server"));
 
 	public LangsToServerPayload(final FriendlyByteBuf buffer) {
 		this(buffer.readList(FriendlyByteBuf::readUtf));

@@ -6,7 +6,6 @@ import com.mrbysco.weirdcommands.network.message.LangsToServerPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -17,7 +16,6 @@ import org.apache.commons.compress.utils.Lists;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 @EventBusSubscriber(modid = WeirdCommandsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
@@ -52,7 +50,7 @@ public class ClientHandler {
 			}
 
 			//Choose random effect
-			gameRenderer.setPostEffect(EFFECTS.get(RANDOM.nextInt(EFFECTS.size())) );
+			gameRenderer.setPostEffect(EFFECTS.get(RANDOM.nextInt(EFFECTS.size())));
 		}
 	}
 }

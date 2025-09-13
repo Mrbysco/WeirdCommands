@@ -24,9 +24,9 @@ public class ClientPayloadHandler {
 		context.enqueueWork(() -> {
 					Minecraft minecraft = Minecraft.getInstance();
 					if (payload.effect() == null) {
-						minecraft.gameRenderer.shutdownEffect();
+						minecraft.gameRenderer.clearPostEffect();
 					} else {
-						minecraft.gameRenderer.loadEffect(payload.effect());
+						minecraft.gameRenderer.setPostEffect(payload.effect());
 					}
 				})
 				.exceptionally(e -> {

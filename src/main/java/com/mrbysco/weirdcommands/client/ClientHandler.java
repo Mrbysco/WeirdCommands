@@ -38,28 +38,21 @@ public class ClientHandler {
 		mc.getLanguageManager().getLanguages().forEach((language, languageInfo) -> languages.add(language));
 		PacketDistributor.sendToServer(new LangsToServerPayload(languages));
 
-		Map<ResourceLocation, Resource> map = mc.getResourceManager().listResources(
-				"shaders/post",
-				location -> {
-					String s = location.getPath();
-					return s.endsWith(".json");
-				}
-		);
 		EFFECTS.clear();
-		map.forEach((location, resource) -> EFFECTS.add(location));
-		EFFECTS.removeIf(location -> location.toString().equals("minecraft:shaders/post/blur.json"));
-
+		EFFECTS.add(ResourceLocation.withDefaultNamespace("creeper"));
+		EFFECTS.add(ResourceLocation.withDefaultNamespace("spider"));
+		EFFECTS.add(ResourceLocation.withDefaultNamespace("invert"));
 		PacketDistributor.sendToServer(new EffectsToServerPayload(EFFECTS));
 	}
 
 	public static void setRandomEffect(GameRenderer gameRenderer) {
 		if (gameRenderer.getMinecraft().getCameraEntity() instanceof Player) {
-			if (gameRenderer.currentEffect() != null) {
-				gameRenderer.shutdownEffect();
+			if (gameRenderer.currentPostEffect() != null) {
+				gameRenderer.clearPostEffect();
 			}
 
 			//Choose random effect
-			gameRenderer.loadEffect(EFFECTS.get(RANDOM.nextInt(EFFECTS.size())) );
+			gameRenderer.setPostEffect(EFFECTS.get(RANDOM.nextInt(EFFECTS.size())) );
 		}
 	}
 }

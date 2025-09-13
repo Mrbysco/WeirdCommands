@@ -11,14 +11,14 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent.LoggingIn;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@EventBusSubscriber(modid = WeirdCommandsMod.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+@EventBusSubscriber(modid = WeirdCommandsMod.MOD_ID, value = Dist.CLIENT)
 public class ClientHandler {
 	static final Random RANDOM = new Random();
 	static final List<ResourceLocation> EFFECTS = new ArrayList<>();
@@ -34,13 +34,13 @@ public class ClientHandler {
 		List<String> languages = Lists.newArrayList();
 		Minecraft mc = Minecraft.getInstance();
 		mc.getLanguageManager().getLanguages().forEach((language, languageInfo) -> languages.add(language));
-		PacketDistributor.sendToServer(new LangsToServerPayload(languages));
+		ClientPacketDistributor.sendToServer(new LangsToServerPayload(languages));
 
 		EFFECTS.clear();
 		EFFECTS.add(ResourceLocation.withDefaultNamespace("creeper"));
 		EFFECTS.add(ResourceLocation.withDefaultNamespace("spider"));
 		EFFECTS.add(ResourceLocation.withDefaultNamespace("invert"));
-		PacketDistributor.sendToServer(new EffectsToServerPayload(EFFECTS));
+		ClientPacketDistributor.sendToServer(new EffectsToServerPayload(EFFECTS));
 	}
 
 	public static void setRandomEffect(GameRenderer gameRenderer) {

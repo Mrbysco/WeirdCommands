@@ -3,7 +3,7 @@ package com.mrbysco.weirdcommands;
 import com.mojang.logging.LogUtils;
 import com.mrbysco.weirdcommands.commands.ModCommands;
 import com.mrbysco.weirdcommands.network.PacketHandler;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
@@ -24,7 +24,7 @@ public class WeirdCommandsMod {
 		ModCommands.register(event.getDispatcher());
 	}
 
-	public static ResourceLocation modLoc(String path) {
-		return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+	public static Identifier modLoc(String path) {
+		return Identifier.fromNamespaceAndPath(MOD_ID, path);
 	}
 }

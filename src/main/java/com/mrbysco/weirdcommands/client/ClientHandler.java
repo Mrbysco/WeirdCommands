@@ -5,7 +5,7 @@ import com.mrbysco.weirdcommands.network.message.EffectsToServerPayload;
 import com.mrbysco.weirdcommands.network.message.LangsToServerPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -21,7 +21,7 @@ import java.util.Random;
 @EventBusSubscriber(modid = WeirdCommandsMod.MOD_ID, value = Dist.CLIENT)
 public class ClientHandler {
 	static final Random RANDOM = new Random();
-	static final List<ResourceLocation> EFFECTS = new ArrayList<>();
+	static final List<Identifier> EFFECTS = new ArrayList<>();
 
 	@SubscribeEvent
 	public static void onLogin(LoggingIn event) {
@@ -37,9 +37,9 @@ public class ClientHandler {
 		ClientPacketDistributor.sendToServer(new LangsToServerPayload(languages));
 
 		EFFECTS.clear();
-		EFFECTS.add(ResourceLocation.withDefaultNamespace("creeper"));
-		EFFECTS.add(ResourceLocation.withDefaultNamespace("spider"));
-		EFFECTS.add(ResourceLocation.withDefaultNamespace("invert"));
+		EFFECTS.add(Identifier.withDefaultNamespace("creeper"));
+		EFFECTS.add(Identifier.withDefaultNamespace("spider"));
+		EFFECTS.add(Identifier.withDefaultNamespace("invert"));
 		ClientPacketDistributor.sendToServer(new EffectsToServerPayload(EFFECTS));
 	}
 

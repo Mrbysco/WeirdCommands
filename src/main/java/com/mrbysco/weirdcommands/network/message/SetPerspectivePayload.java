@@ -7,18 +7,11 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 public record SetPerspectivePayload(Perspective perspective) implements CustomPacketPayload {
-	public static final StreamCodec<FriendlyByteBuf, SetPerspectivePayload> CODEC = CustomPacketPayload.codec(
-			SetPerspectivePayload::write,
+	public static final StreamCodec<FriendlyByteBuf, SetPerspectivePayload> CODEC = StreamCodec.composite(
+			Perspective.PERSPECTIVE_CODEC,
+			SetPerspectivePayload::perspective,
 			SetPerspectivePayload::new);
 	public static final Type<SetPerspectivePayload> ID = new Type<>(WeirdCommandsMod.modLoc("set_perspective"));
-
-	public SetPerspectivePayload(final FriendlyByteBuf buffer) {
-		this(Perspective.getByName(buffer.readUtf()));
-	}
-
-	public void write(FriendlyByteBuf buffer) {
-		buffer.writeUtf(perspective.getPerspectiveName());
-	}
 
 	@Override
 	public Type<? extends CustomPacketPayload> type() {

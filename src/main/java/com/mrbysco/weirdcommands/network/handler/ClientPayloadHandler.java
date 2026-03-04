@@ -23,10 +23,10 @@ public class ClientPayloadHandler {
 	public void handleEffectData(final SetEffectPayload payload, final IPayloadContext context) {
 		context.enqueueWork(() -> {
 					Minecraft minecraft = Minecraft.getInstance();
-					if (payload.effect() == null) {
+					if (payload.effect().isEmpty()) {
 						minecraft.gameRenderer.clearPostEffect();
 					} else {
-						minecraft.gameRenderer.setPostEffect(payload.effect());
+						minecraft.gameRenderer.setPostEffect(payload.effect().get());
 					}
 				})
 				.exceptionally(e -> {

@@ -18,32 +18,33 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.server.command.EnumArgument;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @SuppressWarnings("SameReturnValue")
 public class ModCommands {
 	public static final List<String> languages = new ArrayList<>(List.of("en_us"));
-	public static final List<ResourceLocation> effects = Lists.newArrayList();
+	public static final List<Identifier> effects = Lists.newArrayList();
 
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		final LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal(WeirdCommandsMod.MOD_ID);
-		root.requires((sourceStack) -> sourceStack.hasPermission(2))
+		root.requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
 				.then(Commands.literal("lang")
 						.then(Commands.argument("players", EntityArgument.players())
 								.then(Commands.argument("id", StringArgumentType.word()).suggests((cs, builder) ->
 										SharedSuggestionProvider.suggest(languages, builder)).executes(ModCommands::setLanguage))))
 				.then(Commands.literal("effect")
 						.then(Commands.argument("players", EntityArgument.players())
-								.then(Commands.argument("id", ResourceLocationArgument.id()).suggests((cs, builder) -> {
+								.then(Commands.argument("id", IdentifierArgument.id()).suggests((cs, builder) -> {
 									List<String> values = Lists.newArrayList();
 									effects.forEach((effect) -> values.add(effect.toString()));
 									return SharedSuggestionProvider.suggest(values, builder);
@@ -80,10 +81,10 @@ public class ModCommands {
 	}
 
 	private static int setEffect(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-		ResourceLocation effectID = ResourceLocationArgument.getId(context, "id");
+		Identifier effectID = IdentifierArgument.getId(context, "id");
 		Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "players");
 		for (ServerPlayer player : players) {
-			player.connection.send(new SetEffectPayload(effectID));
+			player.connection.send(new SetEffectPayload(Optional.of(effectID)));
 		}
 
 		MutableComponent component = Component.literal(effectID.toString()).withStyle(ChatFormatting.GOLD);
@@ -101,7 +102,7 @@ public class ModCommands {
 	private static int clearEffect(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 		Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "players");
 		for (ServerPlayer player : players) {
-			player.connection.send(new SetEffectPayload((ResourceLocation) null));
+			player.connection.send(new SetEffectPayload(Optional.empty()));
 		}
 
 		if (players.size() == 1) {
